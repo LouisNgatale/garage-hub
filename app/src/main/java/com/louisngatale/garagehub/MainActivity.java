@@ -18,6 +18,7 @@ import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.SupportMapFragment;
+import com.google.android.gms.maps.model.BitmapDescriptorFactory;
 import com.google.android.gms.maps.model.CameraPosition;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.Marker;
@@ -53,7 +54,6 @@ public class MainActivity extends AppCompatActivity implements GoogleMap.OnMyLoc
     private MarkerOptions options,yourLocation,destination;
     private final String TAG = "MAPS";
     private CameraPosition cameraPosition;
-    Resources res = getResources();
 
     private FirebaseFirestore db;
     private FirebaseAuth mAuth;
@@ -137,7 +137,7 @@ public class MainActivity extends AppCompatActivity implements GoogleMap.OnMyLoc
                     //Add latlng to new options object
                     MarkerOptions options = new MarkerOptions()
                             .position(latLng)
-//                            .icon(res.getDrawable(R.drawable.common_google_signin_btn_icon_disabled, getTheme()))
+                            .icon(BitmapDescriptorFactory.fromResource(R.drawable.baseline_garage_black_36))
                             .title("Garage Location");
 
                     //Add marker to map
