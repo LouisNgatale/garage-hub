@@ -53,16 +53,16 @@ public class RegisterActivity extends AppCompatActivity {
             pwdVal = password.getText().toString();
 
             mAuth.createUserWithEmailAndPassword(emailVal,pwdVal)
-                    .addOnCompleteListener(task -> {
-                        if (task.isSuccessful()){
-                            String uid = task.getResult().getUser().getUid();
+                .addOnCompleteListener(task -> {
+                    if (task.isSuccessful()){
+                        String uid = task.getResult().getUser().getUid();
 
-                            createProfile(uid, emailVal);
-                        }else {
-                            loading.setVisibility(View.GONE);
-                            Toast.makeText(this, task.getException().getMessage(), Toast.LENGTH_SHORT).show();
-                        }
-                    });
+                        createProfile(uid, emailVal);
+                    }else {
+                        loading.setVisibility(View.GONE);
+                        Toast.makeText(this, task.getException().getMessage(), Toast.LENGTH_SHORT).show();
+                    }
+                });
         });
 
     }
@@ -74,35 +74,33 @@ public class RegisterActivity extends AppCompatActivity {
 
         // Create a companies document to store general company data
         mDb.collection("companies")
-                .add(companies)
-                .addOnCompleteListener(task -> {
-                    if (task.isSuccessful()){
-                        String id = task.getResult().getId();
-                        HashMap<String,String> user = new HashMap<>();
-                        user.put("email",email);
-                        user.put("uid",uid);
-                        user.put("company",companyVal);
-                        user.put("companyId",id);
-                        user.put("Full Name",fNameVal);
+            .add(companies)
+            .addOnCompleteListener(task -> {
+                if (task.isSuccessful()){
+                    String id = task.getResult().getId();
+                    HashMap<String,String> user = new HashMap<>();
+                    user.put("email",email);
+                    user.put("uid",uid);
+                    user.put("company",companyVal);
+                    user.put("companyId",id);
+                    user.put("Full Name",fNameVal);
 
-                        // Create a users document to store user data for quick retrieval
-                        mDb.collection("users")
-                            .document(uid)
-                            .set(user)
-                            .addOnCompleteListener(task1 -> {
-                                loading.setVisibility(View.GONE);
+                    // Create a users document to store user data for quick retrieval
+                    mDb.collection("users")
+                        .document(uid)
+                        .set(user)
+                        .addOnCompleteListener(task1 -> {
+                            loading.setVisibility(View.GONE);
 
-                                if (task1.isSuccessful()){
-                                    Intent dashboard = new Intent(RegisterActivity.this,DashboardActivity.class);
-                                    startActivity(dashboard);
-                                    finish();
-                                }else {
-                                    Toast.makeText(this, task1.getException().getMessage(), Toast.LENGTH_SHORT).show();
-                                }
-                            });
-                    }
-                });
-
-
+                            if (task1.isSuccessful()){
+                                Intent dashboard = new Intent(RegisterActivity.this,DashboardActivity.class);
+                                startActivity(dashboard);
+                                finish();
+                            }else {
+                                Toast.makeText(this, task1.getException().getMessage(), Toast.LENGTH_SHORT).show();
+                            }
+                        });
+                }
+            });
     }
 }

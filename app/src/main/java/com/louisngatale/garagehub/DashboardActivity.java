@@ -42,35 +42,5 @@ public class DashboardActivity extends AppCompatActivity {
             Intent editProfile = new Intent(DashboardActivity.this, EditLocationActivity.class);
             startActivity(editProfile);
         });
-
-        // Get the new updated location from the activity and store to database
-
-//        updateLocation();
     }
-
-   /* private void updateLocation() {
-        String uid = mAuth.getCurrentUser().getUid();
-        db.collection("users")
-                .document(uid)
-                .get().addOnCompleteListener(task -> {
-                    if (task.isSuccessful()){
-                        DocumentSnapshot result = task.getResult();
-                        String companyId = result.get("companyId").toString();
-                        HashMap<String ,Object> latLng = new HashMap<>();
-                        latLng.put("Latitude", "Latitude");
-                        latLng.put("Longitude", "Longitude");
-                        HashMap<String,HashMap<String,Object>> location = new HashMap<>();
-
-                        location.put("Address",latLng);
-
-                        // Update user's database
-                        db.collection("companies")
-                                .document(uid)
-                                .set(location);
-                    }
-        });
-    }*/
-
-
-
 }

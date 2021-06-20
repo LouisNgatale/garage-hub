@@ -4,6 +4,8 @@ import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.Intent;
+import android.content.res.Resources;
+import android.graphics.drawable.Icon;
 import android.location.Geocoder;
 import android.location.Location;
 import android.os.Bundle;
@@ -24,62 +26,72 @@ import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.firestore.FirebaseFirestore;
 
+import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.Locale;
 
 public class MainActivity extends AppCompatActivity implements GoogleMap.OnMyLocationButtonClickListener,
             GoogleMap.OnMyLocationClickListener,
             OnMapReadyCallback, GoogleMap.OnMarkerClickListener{
 
-        private Button dashboard;
-        private GoogleMap map;
-        private Geocoder geocoder;
+    private Button dashboard;
+    private GoogleMap map;
+    private Geocoder geocoder;
 
-        // A default location (Sydney, Australia) and default zoom to use when location permission is
-        // not granted.
-        private final LatLng defaultLocation = new LatLng(-33.8523341, 151.2106085);
-        private static final int DEFAULT_ZOOM = 15;
+    private FirebaseFirestore mDb;
 
-        // The entry point to the Fused Location Provider.
-        private FusedLocationProviderClient fusedLocationProviderClient;
-        private Double latitude, longitude;
-        private MarkerOptions options,yourLocation,destination;
-        private final String TAG = "MAPS";
-        private CameraPosition cameraPosition;
+    private ArrayList<HashMap<String,Object>> addresses = new ArrayList<>();
 
-        private FirebaseFirestore db;
-        private FirebaseAuth mAuth;
+    // A default location (Sydney, Australia) and default zoom to use when location permission is
+    // not granted.
+    private final LatLng defaultLocation = new LatLng(-33.8523341, 151.2106085);
+    private static final int DEFAULT_ZOOM = 15;
 
-        // The geographical location where the device is currently located. That is, the last-known
-        // location retrieved by the Fused Location Provider.
-        private Location lastKnownLocation;
+    // The entry point to the Fused Location Provider.
+    private FusedLocationProviderClient fusedLocationProviderClient;
+    private Double latitude, longitude;
+    private MarkerOptions options,yourLocation,destination;
+    private final String TAG = "MAPS";
+    private CameraPosition cameraPosition;
+    Resources res = getResources();
 
-        // Keys for storing activity state.
-        // [START maps_current_place_state_keys]
-        private static final String KEY_CAMERA_POSITION = "camera_position";
-        private static final String KEY_LOCATION = "location";
-        // [END maps_current_place_state_keys]
+    private FirebaseFirestore db;
+    private FirebaseAuth mAuth;
 
-        // [START maps_current_place_on_create]
-        @Override
-        protected void onCreate(Bundle savedInstanceState) {
-            super.onCreate(savedInstanceState);
+    // The geographical location where the device is currently located. That is, the last-known
+    // location retrieved by the Fused Location Provider.
+    private Location lastKnownLocation;
 
-            // Retrieve the content view that renders the map.
-            setContentView(R.layout.activity_main);
+    // Keys for storing activity state.
+    // [START maps_current_place_state_keys]
+    private static final String KEY_CAMERA_POSITION = "camera_position";
+    private static final String KEY_LOCATION = "location";
+    // [END maps_current_place_state_keys]
 
-            db = FirebaseFirestore.getInstance();
-            mAuth = FirebaseAuth.getInstance();
-            geocoder = new Geocoder(this, Locale.getDefault());
+    // [START maps_current_place_on_create]
+    @Override
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
 
-            // [START_EXCLUDE silent]
-            // [START maps_current_place_on_create_save_instance_state]
-            // Retrieve location and camera position from saved instance state.
-            if (savedInstanceState != null) {
-                lastKnownLocation = savedInstanceState.getParcelable(KEY_LOCATION);
-                cameraPosition = savedInstanceState.getParcelable(KEY_CAMERA_POSITION);
-            }
-            // [END maps_current_place_on_create_save_instance_state]
-            // [END_EXCLUDE]
+        mDb = FirebaseFirestore.getInstance();
+
+
+        // Retrieve the content view that renders the map.
+        setContentView(R.layout.activity_main);
+
+        db = FirebaseFirestore.getInstance();
+        mAuth = FirebaseAuth.getInstance();
+        geocoder = new Geocoder(this, Locale.getDefault());
+
+        // [START_EXCLUDE silent]
+        // [START maps_current_place_on_create_save_instance_state]
+        // Retrieve location and camera position from saved instance state.
+        if (savedInstanceState != null) {
+            lastKnownLocation = savedInstanceState.getParcelable(KEY_LOCATION);
+            cameraPosition = savedInstanceState.getParcelable(KEY_CAMERA_POSITION);
+        }
+        // [END maps_current_place_on_create_save_instance_state]
+        // [END_EXCLUDE]
 
         dashboard = findViewById(R.id.dashboard);
 
@@ -93,57 +105,92 @@ public class MainActivity extends AppCompatActivity implements GoogleMap.OnMyLoc
             }
         });
 
-            // Build the map.
-            // [START maps_current_place_map_fragment]
-            SupportMapFragment mapFragment = (SupportMapFragment) getSupportFragmentManager()
-                    .findFragmentById(R.id.map);
-            assert mapFragment != null;
-            mapFragment.getMapAsync(this);
-            // [END maps_current_place_map_fragment]
-            // [END_EXCLUDE]
+        // Build the map.
+        // [START maps_current_place_map_fragment]
+        SupportMapFragment mapFragment = (SupportMapFragment) getSupportFragmentManager()
+                .findFragmentById(R.id.map);
+        assert mapFragment != null;
+        mapFragment.getMapAsync(this);
+        // [END maps_current_place_map_fragment]
+        // [END_EXCLUDE]
 
-            // Construct a FusedLocationProviderClient.
-            fusedLocationProviderClient = LocationServices.getFusedLocationProviderClient(this);
-        }
-        // [END maps_current_place_on_create]
+        // Construct a FusedLocationProviderClient.
+        fusedLocationProviderClient = LocationServices.getFusedLocationProviderClient(this);
 
-        @Override
-        public boolean onMarkerClick(@NonNull Marker marker) {
-            return false;
-        }
+        // Retrieve garage locations from database
+    }
+    // [END maps_current_place_on_create]
 
-        @Override
-        public boolean onMyLocationButtonClick() {
-            return false;
-        }
 
-        @Override
-        public void onMyLocationClick(@NonNull Location location) {
 
-        }
+    private void retrieve_addresses(GoogleMap googleMap) {
+        mDb.collection("companies")
+            .get().addOnCompleteListener(task -> {
+                task.getResult().getDocuments().forEach(doc -> {
+                    addresses.add((HashMap<String, Object>) doc.get("Address"));
 
-        /**
-         * Manipulates the map when it's available.
-         * This callback is triggered when the map is ready to be used.
-         */
-        // [START maps_current_place_on_map_ready]
-        @Override
-        public void onMapReady(GoogleMap googleMap) {
-            map = googleMap;
+                    //Create new latlng object
+                    LatLng latLng = new LatLng(
+                            (double) ((HashMap<?, ?>) doc.get("Address")).get("Latitude"),
+                            (double) ((HashMap<?, ?>) doc.get("Address")).get("Longitude"));
 
-            //
-            googleMap.addMarker(new MarkerOptions()
-                    .position(new LatLng(0, 0))
-                    .title("Marker"));
+                    //Add latlng to new options object
+                    MarkerOptions options = new MarkerOptions()
+                            .position(latLng)
+//                            .icon(res.getDrawable(R.drawable.common_google_signin_btn_icon_disabled, getTheme()))
+                            .title("Garage Location");
 
-            // Turn on the My Location layer and the related control on the map.
-            updateLocationUI();
+                    //Add marker to map
+                    googleMap.addMarker(options);
+                });
+        });
+    }
 
-            // Get the current location of the device and set the position of the map.
-            getDeviceLocation();
+    @Override
+    public boolean onMarkerClick(@NonNull Marker marker) {
+        return false;
+    }
+
+    @Override
+    public boolean onMyLocationButtonClick() {
+        return false;
+    }
+
+    @Override
+    public void onMyLocationClick(@NonNull Location location) {
+
+    }
+
+    @Override
+    protected void onStart() {
+        super.onStart();
+
+    }
+
+    /**
+     * Manipulates the map when it's available.
+     * This callback is triggered when the map is ready to be used.
+     */
+    // [START maps_current_place_on_map_ready]
+    @Override
+    public void onMapReady(GoogleMap googleMap) {
+        map = googleMap;
+
+        //
+        googleMap.addMarker(new MarkerOptions()
+                .position(new LatLng(0, 0))
+                .title("Marker"));
+
+        // Turn on the My Location layer and the related control on the map.
+        updateLocationUI();
+
+        // Get the current location of the device and set the position of the map.
+        getDeviceLocation();
+
+        retrieve_addresses(googleMap);
 
 //        map.moveCamera(CameraUpdateFactory.newLatLng(sydney));
-        }
+    }
 
         /**
          * Updates the map's UI settings based on whether the user has granted location permission.
