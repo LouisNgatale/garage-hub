@@ -1,0 +1,68 @@
+{
+  "project_info": {
+    "project_number": "1088428128278",
+    "project_id": "my-garage-cb6a5",
+    "storage_bucket": "my-garage-cb6a5.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:1088428128278:android:d3415a1651e033c02c9d37",
+        "android_client_info": {
+          "package_name": "com.louisngatale.garagehub"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "1088428128278-toeiek4u9o7q55dnptdvcbeu7p96telk.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCXVa6_R4z4jYmR5R4fpITPAiZTfoul26U"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "1088428128278-toeiek4u9o7q55dnptdvcbeu7p96telk.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    },
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:1088428128278:android:c0258e2184841a722c9d37",
+        "android_client_info": {
+          "package_name": "com.louisngatale.mygarage"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "1088428128278-toeiek4u9o7q55dnptdvcbeu7p96telk.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCXVa6_R4z4jYmR5R4fpITPAiZTfoul26U"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "1088428128278-toeiek4u9o7q55dnptdvcbeu7p96telk.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
