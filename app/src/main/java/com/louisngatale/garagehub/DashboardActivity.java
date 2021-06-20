@@ -45,7 +45,7 @@ public class DashboardActivity extends AppCompatActivity {
 
         // Get the new updated location from the activity and store to database
 
-//        updateLocation();
+        updateLocation();
     }
 
     private void updateLocation() {
@@ -67,11 +67,8 @@ public class DashboardActivity extends AppCompatActivity {
                         db.collection("companies")
                                 .document(uid)
                                 .set(location);
-
                     }
         });
-
-
     }
 
 

@@ -72,7 +72,7 @@ public class EditLocationActivity extends AppCompatActivity implements GoogleMap
         // [END_EXCLUDE]
 
         SupportMapFragment mapFragment = (SupportMapFragment) getSupportFragmentManager()
-                .findFragmentById(R.id.map);
+                .findFragmentById(R.id.edit_location_map);
         mapFragment.getMapAsync(this);
 
         fusedLocationProviderClient = LocationServices.getFusedLocationProviderClient(this);
