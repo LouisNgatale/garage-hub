@@ -35,7 +35,7 @@ public class DashboardActivity extends AppCompatActivity {
 
         logout.setOnClickListener(v -> {
             mAuth.signOut();
-
+            finish();
         });
 
         editProfile.setOnClickListener(v -> {
