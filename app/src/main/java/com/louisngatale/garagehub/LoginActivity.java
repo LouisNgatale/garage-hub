@@ -44,17 +44,18 @@ public class LoginActivity extends AppCompatActivity {
             emailVal = email.getText().toString();
             pwdVal = password.getText().toString();
 
-            boolean loggedIn = mAuth.signInWithEmailAndPassword(emailVal, pwdVal).isSuccessful();
-
-            if (loggedIn) {
-                loading.setVisibility(View.INVISIBLE);
-                Intent dasboard = new Intent(LoginActivity.this, DashboardActivity.class);
-                startActivity(dasboard);
-                finish();
-            }else {
-                loading.setVisibility(View.INVISIBLE);
-                Toast.makeText(this, "Failed logging in!", Toast.LENGTH_SHORT).show();
-            }
+            mAuth.signInWithEmailAndPassword(emailVal, pwdVal)
+                    .addOnCompleteListener(task -> {
+                        if (task.isSuccessful()){
+                            loading.setVisibility(View.INVISIBLE);
+                            Intent dasboard = new Intent(LoginActivity.this, DashboardActivity.class);
+                            startActivity(dasboard);
+                            finish();
+                        }else {
+                            loading.setVisibility(View.INVISIBLE);
+                            Toast.makeText(this, "Failed logging in!", Toast.LENGTH_SHORT).show();
+                        }
+                    });
         });
 
     }
