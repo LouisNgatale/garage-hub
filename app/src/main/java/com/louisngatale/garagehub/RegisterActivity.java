@@ -4,8 +4,11 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ProgressBar;
+import android.widget.Toast;
 
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.firestore.FirebaseFirestore;
@@ -18,6 +21,7 @@ public class RegisterActivity extends AppCompatActivity {
     FirebaseAuth mAuth;
     FirebaseFirestore mDb;
     String fNameVal, companyVal, emailVal, pwdVal;
+    ProgressBar loading;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -33,6 +37,7 @@ public class RegisterActivity extends AppCompatActivity {
         password = findViewById(R.id.password_value);
         register = findViewById(R.id.register);
         login = findViewById(R.id.login);
+        loading = findViewById(R.id.loading);
 
         login.setOnClickListener(v -> {
             Intent login = new Intent(RegisterActivity.this,LoginActivity.class);
@@ -41,6 +46,7 @@ public class RegisterActivity extends AppCompatActivity {
         });
 
         register.setOnClickListener(v -> {
+            loading.setVisibility(View.VISIBLE);
             fNameVal = fullName.getText().toString();
             companyVal = company.getText().toString();
             emailVal = email.getText().toString();
@@ -48,11 +54,13 @@ public class RegisterActivity extends AppCompatActivity {
 
             mAuth.createUserWithEmailAndPassword(emailVal,pwdVal)
                     .addOnCompleteListener(task -> {
+                        loading.setVisibility(View.GONE);
                         if (task.isSuccessful()){
                             String uid = task.getResult().getUser().getUid();
 
                             createProfile(uid, emailVal);
                         }
+                        Toast.makeText(this, task.getException().getMessage(), Toast.LENGTH_SHORT).show();
                     });
         });
 
@@ -67,7 +75,6 @@ public class RegisterActivity extends AppCompatActivity {
                 .add(companies)
                 .addOnCompleteListener(task -> {
                     if (task.isSuccessful()){
-
                         String id = task.getResult().getId();
                         HashMap<String,String> user = new HashMap<>();
                         user.put("email",email);

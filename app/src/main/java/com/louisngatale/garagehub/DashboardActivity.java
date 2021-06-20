@@ -6,6 +6,8 @@ import androidx.recyclerview.widget.RecyclerView;
 import android.content.Intent;
 import android.os.Bundle;
 import android.widget.Button;
+import android.widget.ImageButton;
+import android.widget.ImageView;
 
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.firestore.DocumentSnapshot;
@@ -15,6 +17,7 @@ import java.util.HashMap;
 
 public class DashboardActivity extends AppCompatActivity {
     Button editProfile;
+    ImageButton logout;
     RecyclerView requests;
     FirebaseFirestore db;
     FirebaseAuth mAuth;
@@ -28,6 +31,12 @@ public class DashboardActivity extends AppCompatActivity {
 
         requests = findViewById(R.id.requests);
         editProfile = findViewById(R.id.editLocation);
+        logout = findViewById(R.id.logout);
+
+        logout.setOnClickListener(v -> {
+            mAuth.signOut();
+
+        });
 
         editProfile.setOnClickListener(v -> {
             Intent editProfile = new Intent(DashboardActivity.this, EditLocationActivity.class);
@@ -36,7 +45,7 @@ public class DashboardActivity extends AppCompatActivity {
 
         // Get the new updated location from the activity and store to database
 
-        updateLocation();
+//        updateLocation();
     }
 
     private void updateLocation() {
@@ -58,8 +67,6 @@ public class DashboardActivity extends AppCompatActivity {
                         db.collection("companies")
                                 .document(uid)
                                 .set(location);
-                        
-
 
                     }
         });
