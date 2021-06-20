@@ -58,10 +58,13 @@ public class EditLocationActivity extends AppCompatActivity implements GoogleMap
     private Double latitude, longitude;
     private MarkerOptions options, yourLocation, destination;
     private final String TAG = "MAPS";
+
+
     private CameraPosition cameraPosition;
 
     private FirebaseAuth mAuth;
-    private FirebaseFirestore db;
+    private FirebaseFirestore mDb;
+
 
 
     private HashMap<String,String> address;
@@ -75,10 +78,12 @@ public class EditLocationActivity extends AppCompatActivity implements GoogleMap
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_edit_profile);
 
-        db = FirebaseFirestore.getInstance();
+        mDb = FirebaseFirestore.getInstance();
         mAuth = FirebaseAuth.getInstance();
         geocoder = new Geocoder(this, Locale.getDefault());
         save_location = findViewById(R.id.save_location);
+
+        save_location.setOnClickListener(this::onClick);
 
         // [START_EXCLUDE silent]
         // [START maps_current_place_on_create_save_instance_state]
@@ -255,14 +260,30 @@ public class EditLocationActivity extends AppCompatActivity implements GoogleMap
     public void onClick(View v) {
         switch (v.getId()){
             case R.id.save_location:
-                Intent returnIntent = new Intent();
-                returnIntent.putExtra("Latitude",latitude);
-                returnIntent.putExtra("Longitude",longitude);
-                setResult(Activity.RESULT_OK,returnIntent);
-                finish();
+                update_location();
                 break;
             default:
                 break;
         }
+    }
+
+    private void update_location() {
+        mDb.collection("users")
+                .document(mAuth.getUid())
+                .get().addOnCompleteListener(task -> {
+                    if (task.isSuccessful()){
+                        String companyId = task.getResult().get("companyId").toString();
+
+                        HashMap<String, Object> latLng = new HashMap<>();
+                        latLng.put("Latitude", latitude);
+                        latLng.put("Longitude", longitude);
+
+                        mDb.collection("companies").document(companyId)
+                                .update("Address",latLng);
+
+                        Toast.makeText(this, "Location updated", Toast.LENGTH_SHORT).show();
+                        finish();
+                    }
+        });
     }
 }

@@ -59,7 +59,6 @@ public class RegisterActivity extends AppCompatActivity {
 
                             createProfile(uid, emailVal);
                         }else {
-
                             loading.setVisibility(View.GONE);
                             Toast.makeText(this, task.getException().getMessage(), Toast.LENGTH_SHORT).show();
                         }
@@ -88,19 +87,19 @@ public class RegisterActivity extends AppCompatActivity {
 
                         // Create a users document to store user data for quick retrieval
                         mDb.collection("users")
-                                .document(uid)
-                                .set(user)
-                                .addOnCompleteListener(task1 -> {
-                                    loading.setVisibility(View.GONE);
+                            .document(uid)
+                            .set(user)
+                            .addOnCompleteListener(task1 -> {
+                                loading.setVisibility(View.GONE);
 
-                                    if (task1.isSuccessful()){
-                                        Intent dashboard = new Intent(RegisterActivity.this,DashboardActivity.class);
-                                        startActivity(dashboard);
-                                        finish();
-                                    }else {
-                                        Toast.makeText(this, task1.getException().getMessage(), Toast.LENGTH_SHORT).show();
-                                    }
-                                });
+                                if (task1.isSuccessful()){
+                                    Intent dashboard = new Intent(RegisterActivity.this,DashboardActivity.class);
+                                    startActivity(dashboard);
+                                    finish();
+                                }else {
+                                    Toast.makeText(this, task1.getException().getMessage(), Toast.LENGTH_SHORT).show();
+                                }
+                            });
                     }
                 });
 

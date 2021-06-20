@@ -45,10 +45,10 @@ public class DashboardActivity extends AppCompatActivity {
 
         // Get the new updated location from the activity and store to database
 
-        updateLocation();
+//        updateLocation();
     }
 
-    private void updateLocation() {
+   /* private void updateLocation() {
         String uid = mAuth.getCurrentUser().getUid();
         db.collection("users")
                 .document(uid)
@@ -69,7 +69,8 @@ public class DashboardActivity extends AppCompatActivity {
                                 .set(location);
                     }
         });
-    }
+    }*/
+
 
 
 }
