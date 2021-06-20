@@ -138,7 +138,8 @@ public class MainActivity extends AppCompatActivity implements GoogleMap.OnMyLoc
                     MarkerOptions options = new MarkerOptions()
                             .position(latLng)
                             .icon(BitmapDescriptorFactory.fromResource(R.drawable.baseline_garage_black_36))
-                            .title("Garage Location");
+                            .title(doc.get("company").toString())
+                            .snippet(doc.get("description").toString());
 
                     //Add marker to map
                     googleMap.addMarker(options);
