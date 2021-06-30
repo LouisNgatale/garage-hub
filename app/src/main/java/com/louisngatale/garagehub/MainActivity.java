@@ -11,6 +11,7 @@ import android.location.Location;
 import android.os.Bundle;
 import android.util.Log;
 import android.widget.Button;
+import android.widget.Toast;
 
 import com.google.android.gms.location.FusedLocationProviderClient;
 import com.google.android.gms.location.LocationServices;
@@ -26,6 +27,7 @@ import com.google.android.gms.maps.model.MarkerOptions;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.firestore.FirebaseFirestore;
+import com.louisngatale.garagehub.adapters.CustomInfoWindowsAdapter;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -75,7 +77,6 @@ public class MainActivity extends AppCompatActivity implements GoogleMap.OnMyLoc
 
         mDb = FirebaseFirestore.getInstance();
 
-
         // Retrieve the content view that renders the map.
         setContentView(R.layout.activity_main);
 
@@ -121,8 +122,6 @@ public class MainActivity extends AppCompatActivity implements GoogleMap.OnMyLoc
     }
     // [END maps_current_place_on_create]
 
-
-
     private void retrieve_addresses(GoogleMap googleMap) {
         mDb.collection("companies")
             .get().addOnCompleteListener(task -> {
@@ -142,7 +141,7 @@ public class MainActivity extends AppCompatActivity implements GoogleMap.OnMyLoc
                             .snippet(doc.get("description").toString());
 
                     //Add marker to map
-                    googleMap.addMarker(options);
+                    googleMap.addMarker(options).setTag(doc);
                 });
         });
     }
@@ -159,13 +158,6 @@ public class MainActivity extends AppCompatActivity implements GoogleMap.OnMyLoc
 
     @Override
     public void onMyLocationClick(@NonNull Location location) {
-
-    }
-
-    @Override
-    protected void onStart() {
-        super.onStart();
-
     }
 
     /**
@@ -176,6 +168,8 @@ public class MainActivity extends AppCompatActivity implements GoogleMap.OnMyLoc
     @Override
     public void onMapReady(GoogleMap googleMap) {
         map = googleMap;
+
+        map.setInfoWindowAdapter(new CustomInfoWindowsAdapter(MainActivity.this));
 
         //
         googleMap.addMarker(new MarkerOptions()
@@ -193,74 +187,74 @@ public class MainActivity extends AppCompatActivity implements GoogleMap.OnMyLoc
 //        map.moveCamera(CameraUpdateFactory.newLatLng(sydney));
     }
 
-        /**
-         * Updates the map's UI settings based on whether the user has granted location permission.
-         */
-        // [START maps_current_place_update_location_ui]
-        private void updateLocationUI() {
-            if (map == null) {
-                return;
-            }
-            try {
-                map.setMyLocationEnabled(true);
-                map.getUiSettings().setMyLocationButtonEnabled(true);
-            } catch (SecurityException e)  {
-                Log.e("Exception: %s", e.getMessage());
-            }
+    /**
+     * Updates the map's UI settings based on whether the user has granted location permission.
+     */
+    // [START maps_current_place_update_location_ui]
+    private void updateLocationUI() {
+        if (map == null) {
+            return;
         }
+        try {
+            map.setMyLocationEnabled(true);
+            map.getUiSettings().setMyLocationButtonEnabled(true);
+        } catch (SecurityException e)  {
+            Log.e("Exception: %s", e.getMessage());
+        }
+    }
 
-        /**
-         * Gets the current location of the device, and positions the map's camera.
-         * @Author: Louis Ngatale
+    /**
+     * Gets the current location of the device, and positions the map's camera.
+     * @Author: Louis Ngatale
+     */
+    // [START maps_current_place_get_device_location]
+    private void getDeviceLocation() {
+         /*
+         * Get the best and most recent location of the device, which may be null in rare
+         * cases when a location is not available.
          */
-        // [START maps_current_place_get_device_location]
-        private void getDeviceLocation() {
-             /*
-             * Get the best and most recent location of the device, which may be null in rare
-             * cases when a location is not available.
-             */
-            try {
-                Task<Location> locationResult = fusedLocationProviderClient.getLastLocation();
-                locationResult.addOnCompleteListener(this, task -> {
-                    if (task.isSuccessful()) {
-                        // Set the map's camera position to the current location of the device.
-                        lastKnownLocation = task.getResult();
-                        if (lastKnownLocation != null) {
-                            map.moveCamera(CameraUpdateFactory.newLatLngZoom(
-                                    new LatLng(lastKnownLocation.getLatitude(),
-                                            lastKnownLocation.getLongitude()), DEFAULT_ZOOM));
+        try {
+            Task<Location> locationResult = fusedLocationProviderClient.getLastLocation();
+            locationResult.addOnCompleteListener(this, task -> {
+                if (task.isSuccessful()) {
+                    // Set the map's camera position to the current location of the device.
+                    lastKnownLocation = task.getResult();
+                    if (lastKnownLocation != null) {
+                        map.moveCamera(CameraUpdateFactory.newLatLngZoom(
+                                new LatLng(lastKnownLocation.getLatitude(),
+                                        lastKnownLocation.getLongitude()), DEFAULT_ZOOM));
 
-                            // Get current location and add marker
-                            options = new MarkerOptions()
-                                    .position(new LatLng(lastKnownLocation.getLatitude(),
-                                            lastKnownLocation.getLongitude()))
-                                    .title("Your location");
+                        // Get current location and add marker
+                        options = new MarkerOptions()
+                                .position(new LatLng(lastKnownLocation.getLatitude(),
+                                        lastKnownLocation.getLongitude()))
+                                .title("Your location");
 //                                        .icon(BitmapDescriptorFactory.fromResource(R.drawable.you));
 //                                map.addMarker(options);
-                        }
-                    } else {
-                        map.moveCamera(CameraUpdateFactory
-                                .newLatLngZoom(defaultLocation, DEFAULT_ZOOM));
-                        map.getUiSettings().setMyLocationButtonEnabled(false);
                     }
-                });
-            } catch (SecurityException e)  {
-                Log.e("Exception: %s", e.getMessage(), e);
-            }
+                } else {
+                    map.moveCamera(CameraUpdateFactory
+                            .newLatLngZoom(defaultLocation, DEFAULT_ZOOM));
+                    map.getUiSettings().setMyLocationButtonEnabled(false);
+                }
+            });
+        } catch (SecurityException e)  {
+            Log.e("Exception: %s", e.getMessage(), e);
         }
-        // [END maps_current_place_get_device_location]
+    }
+    // [END maps_current_place_get_device_location]
 
-        /**
-         * Saves the state of the map when the activity is paused.
-         */
-        // [START maps_current_place_on_save_instance_state]
-        @Override
-        protected void onSaveInstanceState(Bundle outState) {
-            if (map != null) {
-                outState.putParcelable(KEY_CAMERA_POSITION, map.getCameraPosition());
-                outState.putParcelable(KEY_LOCATION, lastKnownLocation);
-            }
-            super.onSaveInstanceState(outState);
+    /**
+     * Saves the state of the map when the activity is paused.
+     */
+    // [START maps_current_place_on_save_instance_state]
+    @Override
+    protected void onSaveInstanceState(Bundle outState) {
+        if (map != null) {
+            outState.putParcelable(KEY_CAMERA_POSITION, map.getCameraPosition());
+            outState.putParcelable(KEY_LOCATION, lastKnownLocation);
         }
-        // [END maps_current_place_on_save_instance_state]
+        super.onSaveInstanceState(outState);
+    }
+    // [END maps_current_place_on_save_instance_state]
 }

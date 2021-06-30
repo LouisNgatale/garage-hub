@@ -17,10 +17,10 @@ import java.util.HashMap;
 
 public class RegisterActivity extends AppCompatActivity {
     Button register,login;
-    EditText fullName,company,email,password;
+    EditText fullName,company,email,password, phone, description;
     FirebaseAuth mAuth;
     FirebaseFirestore mDb;
-    String fNameVal, companyVal, emailVal, pwdVal;
+    String fNameVal, companyVal, emailVal, pwdVal,descriptionVal, phoneVal;
     ProgressBar loading;
 
     @Override
@@ -37,6 +37,8 @@ public class RegisterActivity extends AppCompatActivity {
         password = findViewById(R.id.password_value);
         register = findViewById(R.id.register);
         login = findViewById(R.id.login);
+        phone = findViewById(R.id.company_phone_value);
+        description = findViewById(R.id.details_value);
         loading = findViewById(R.id.loading);
 
         login.setOnClickListener(v -> {
@@ -51,6 +53,8 @@ public class RegisterActivity extends AppCompatActivity {
             companyVal = company.getText().toString();
             emailVal = email.getText().toString();
             pwdVal = password.getText().toString();
+            phoneVal = phone.getText().toString();
+            descriptionVal = description.getText().toString();
 
             mAuth.createUserWithEmailAndPassword(emailVal,pwdVal)
                 .addOnCompleteListener(task -> {
@@ -64,13 +68,14 @@ public class RegisterActivity extends AppCompatActivity {
                     }
                 });
         });
-
     }
 
     private void createProfile(String uid, String email) {
         HashMap<String,String> companies = new HashMap<>();
         companies.put("owner",uid);
         companies.put("company",companyVal);
+        companies.put("description",descriptionVal);
+        companies.put("phone",phoneVal);
 
         // Create a companies document to store general company data
         mDb.collection("companies")
