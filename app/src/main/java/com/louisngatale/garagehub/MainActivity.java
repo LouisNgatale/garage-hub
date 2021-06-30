@@ -9,6 +9,7 @@ import android.graphics.drawable.Icon;
 import android.location.Geocoder;
 import android.location.Location;
 import android.os.Bundle;
+import android.os.Parcelable;
 import android.util.Log;
 import android.widget.Button;
 import android.widget.Toast;
@@ -26,14 +27,18 @@ import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.louisngatale.garagehub.adapters.CustomInfoWindowsAdapter;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Locale;
+import java.util.Objects;
 
-public class MainActivity extends AppCompatActivity implements GoogleMap.OnMyLocationButtonClickListener,
+public class MainActivity extends AppCompatActivity implements
+            GoogleMap.OnInfoWindowClickListener, GoogleMap.OnMyLocationButtonClickListener,
             GoogleMap.OnMyLocationClickListener,
             OnMapReadyCallback, GoogleMap.OnMarkerClickListener{
 
@@ -168,6 +173,7 @@ public class MainActivity extends AppCompatActivity implements GoogleMap.OnMyLoc
     @Override
     public void onMapReady(GoogleMap googleMap) {
         map = googleMap;
+        map.setOnInfoWindowClickListener(this);
 
         map.setInfoWindowAdapter(new CustomInfoWindowsAdapter(MainActivity.this));
 
@@ -255,6 +261,15 @@ public class MainActivity extends AppCompatActivity implements GoogleMap.OnMyLoc
             outState.putParcelable(KEY_LOCATION, lastKnownLocation);
         }
         super.onSaveInstanceState(outState);
+    }
+
+    @Override
+    public void onInfoWindowClick(@NonNull Marker marker) {
+        DocumentSnapshot tag = (DocumentSnapshot) marker.getTag();
+
+        Intent view_garage = new Intent(MainActivity.this, ViewGarage.class);
+        view_garage.putExtra("id", tag.getId());
+        startActivity(view_garage);
     }
     // [END maps_current_place_on_save_instance_state]
 }

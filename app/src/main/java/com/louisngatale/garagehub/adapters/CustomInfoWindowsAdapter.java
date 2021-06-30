@@ -32,7 +32,6 @@ public class CustomInfoWindowsAdapter implements GoogleMap.InfoWindowAdapter {
         TextView tvTitle = view.findViewById(R.id.title);
         TextView phone = view.findViewById(R.id.phone_number);
         TextView tvSnippet = view.findViewById(R.id.desc);
-        Button view_item = view.findViewById(R.id.view_item);
 
         DocumentSnapshot doc = (DocumentSnapshot) marker.getTag();
 
@@ -44,10 +43,6 @@ public class CustomInfoWindowsAdapter implements GoogleMap.InfoWindowAdapter {
             tvSnippet.setText((String) doc.get("description"));
         }
         phone.setText((String) doc.get("phone"));
-
-        view_item.setOnClickListener(v -> {
-            Toast.makeText(mContext, doc.getId(), Toast.LENGTH_SHORT).show();
-        });
     }
 
     @Nullable

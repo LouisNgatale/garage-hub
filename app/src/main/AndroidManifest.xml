@@ -17,7 +17,8 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/Theme.GarageHub">
-        <activity android:name=".EditLocationActivity"></activity>
+        <activity android:name=".ViewGarage"></activity>
+        <activity android:name=".EditLocationActivity" />
         <activity android:name=".DashboardActivity" />
         <activity android:name=".SplashScreen">
             <intent-filter>
