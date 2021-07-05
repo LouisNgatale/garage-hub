@@ -219,21 +219,21 @@ public class RegisterActivity extends AppCompatActivity implements View.OnClickL
 
     private void upload_image_documents(String documentId){
         StorageReference mImageStorage = FirebaseStorage.getInstance().getReference();
-        DocumentReference mDbRef = mDb.collection("houses").document(documentId);
+        DocumentReference mDbRef = mDb.collection("users").document(documentId);
 
         CompletableFuture.supplyAsync(() -> {
             // Upload Images in asynchronous mode
             images.forEach(img -> {
-                StorageReference filepath = mImageStorage.child("House Images").child(createImageName() + ".jpg");
+                StorageReference filepath = mImageStorage.child("Documents").child(createImageName() + ".jpg");
                 filepath
-                        .putFile(Uri.parse(img))
-                        .addOnSuccessListener(taskSnapshot -> filepath
-                            .getDownloadUrl()
-                            .addOnSuccessListener(uri -> {
-                                String downloadUri = uri.toString();
-                                mDbRef.update("houseImages", FieldValue.arrayUnion(downloadUri)).addOnCompleteListener(task -> {
-                                });
-                            }).addOnFailureListener(e -> Log.d(TAG, "onFailure: " + e)));
+                    .putFile(Uri.parse(img))
+                    .addOnSuccessListener(taskSnapshot -> filepath
+                        .getDownloadUrl()
+                        .addOnSuccessListener(uri -> {
+                            String downloadUri = uri.toString();
+                            mDbRef.update("documentImages", FieldValue.arrayUnion(downloadUri)).addOnCompleteListener(task -> {
+                            });
+                        }).addOnFailureListener(e -> Log.d(TAG, "onFailure: " + e)));
             });
             return null;
         })
