@@ -1,6 +1,7 @@
 package com.louisngatale.garagehub;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.recyclerview.widget.RecyclerView;
 
 import android.content.Intent;
 import android.os.Bundle;
@@ -12,6 +13,7 @@ import android.widget.Toast;
 
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.firestore.FirebaseFirestore;
+import com.louisngatale.garagehub.adapters.PicturePreviewRecyclerAdapter;
 
 import java.util.HashMap;
 
@@ -22,6 +24,8 @@ public class RegisterActivity extends AppCompatActivity {
     FirebaseFirestore mDb;
     String fNameVal, companyVal, emailVal, pwdVal,descriptionVal, phoneVal;
     ProgressBar loading;
+    RecyclerView imagePreviewRecView;
+    PicturePreviewRecyclerAdapter previewAdapter;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
