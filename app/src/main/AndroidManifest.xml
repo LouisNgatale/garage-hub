@@ -12,7 +12,6 @@
         android:required="true" />
 
     <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
-
     <uses-permission
         android:name="android.permission.WRITE_EXTERNAL_STORAGE"
         tools:ignore="ScopedStorage" />
@@ -29,30 +28,28 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/Theme.GarageHub">
+        <activity android:name=".CustomerLogin" />
+        <activity android:name=".CustomerRegistration" />
         <activity android:name=".ViewGarage" />
         <activity android:name=".EditLocationActivity" />
         <activity android:name=".DashboardActivity" />
         <activity android:name=".SplashScreen">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
+
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
         <activity android:name=".RegisterActivity" />
+
         <meta-data
             android:name="com.google.android.geo.API_KEY"
             android:value="AIzaSyBgdr058uyYNUGWpI2FGoGHaBRzb9GoTJ0" />
+
         <activity android:name=".LoginActivity" />
         <activity android:name=".MainActivity" />
-        <provider
-            android:name="androidx.core.content.FileProvider"
-            android:authorities="com.louisngatale.android.fileprovider"
-            android:exported="false"
-            android:grantUriPermissions="true">
-            <meta-data
-                android:name="android.support.FILE_PROVIDER_PATHS"
-                android:resource="@xml/file_paths" />
-        </provider>
+
+
     </application>
 
 </manifest>

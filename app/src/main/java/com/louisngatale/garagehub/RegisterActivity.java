@@ -56,6 +56,8 @@ public class RegisterActivity extends AppCompatActivity implements View.OnClickL
     String currentPhotoPath;
     private ProgressDialog mProgress;
     ArrayList<String> images;
+
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);

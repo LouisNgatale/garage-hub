@@ -127,29 +127,35 @@ public class MainActivity extends AppCompatActivity implements
     }
     // [END maps_current_place_on_create]
 
+    // [START get_all_maps_locations]
     private void retrieve_addresses(GoogleMap googleMap) {
         mDb.collection("companies")
             .get().addOnCompleteListener(task -> {
-                task.getResult().getDocuments().forEach(doc -> {
-                    addresses.add((HashMap<String, Object>) doc.get("Address"));
+                if(!task.getResult().isEmpty()){
+                    task.getResult().getDocuments().forEach(doc -> {
+                        if (doc.contains("Address")){
+                            addresses.add((HashMap<String, Object>) doc.get("Address"));
+                            //Create new latitude and longitude object
+                            LatLng latLng = new LatLng(
+                                (double) ((HashMap<?, ?>) Objects.requireNonNull(doc.get("Address")))
+                                        .get("Latitude"),
+                                (double) ((HashMap<?, ?>) Objects.requireNonNull(doc.get("Address")))
+                                        .get("Longitude"));
+                            //Add latitude and longitude to new options object
+                            MarkerOptions options = new MarkerOptions()
+                                .position(latLng)
+                                .icon(BitmapDescriptorFactory.fromResource(R.drawable.baseline_garage_black_36))
+                                .title(doc.get("company").toString())
+                                .snippet(doc.get("description").toString());
+                            //Add marker to map
+                            googleMap.addMarker(options).setTag(doc);
+                        }
 
-                    //Create new latlng object
-                    LatLng latLng = new LatLng(
-                            (double) ((HashMap<?, ?>) doc.get("Address")).get("Latitude"),
-                            (double) ((HashMap<?, ?>) doc.get("Address")).get("Longitude"));
-
-                    //Add latlng to new options object
-                    MarkerOptions options = new MarkerOptions()
-                            .position(latLng)
-                            .icon(BitmapDescriptorFactory.fromResource(R.drawable.baseline_garage_black_36))
-                            .title(doc.get("company").toString())
-                            .snippet(doc.get("description").toString());
-
-                    //Add marker to map
-                    googleMap.addMarker(options).setTag(doc);
-                });
+                    });
+                }
         });
     }
+    // [END get_all_maps_locations]
 
     @Override
     public boolean onMarkerClick(@NonNull Marker marker) {
