@@ -28,7 +28,8 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/Theme.GarageHub">
-        <activity android:name=".AddService"></activity>
+        <activity android:name=".ViewComments"></activity>
+        <activity android:name=".AddService" />
         <activity android:name=".CustomerLogin" />
         <activity android:name=".CustomerRegistration" />
         <activity android:name=".ViewGarage" />

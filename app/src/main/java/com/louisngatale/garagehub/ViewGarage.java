@@ -12,7 +12,9 @@ import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.View;
 import android.widget.Button;
+import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -20,6 +22,7 @@ import com.google.android.gms.location.FusedLocationProviderClient;
 import com.google.android.gms.location.LocationServices;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.firestore.DocumentSnapshot;
+import com.google.firebase.firestore.FieldValue;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.louisngatale.garagehub.adapters.ServicesAdapter;
 import com.louisngatale.garagehub.data.Services;
@@ -42,6 +45,8 @@ public class ViewGarage extends AppCompatActivity {
     private static final int LOCATION_PERMISSION_CODE = 100;
     String documentPath;
     RecyclerView recyclerView;
+    EditText comment;
+    Button save_comment;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -57,18 +62,32 @@ public class ViewGarage extends AppCompatActivity {
         fusedLocationClient = LocationServices.getFusedLocationProviderClient(this);
         services_rec = findViewById(R.id.services_list);
         mDb = FirebaseFirestore.getInstance();
-
+        comment = findViewById(R.id.comment);
+        save_comment = findViewById(R.id.save_comment);
         Intent intent = getIntent();
 
-        String obj = intent.getStringExtra("id");
+        /*if (mAuth.getCurrentUser() != null){
+            save_comment.setVisibility(View.VISIBLE);
+            comment.setVisibility(View.VISIBLE);
+        }*/
 
-        documentPath = obj;
+        documentPath = intent.getStringExtra("id");
+
+        save_comment.setOnClickListener(v -> {
+            String s = comment.getText().toString();
+            mDb.collection("companies").document(documentPath.trim())
+                    .update("comments", FieldValue.arrayUnion(s))
+                    .addOnCompleteListener(task -> {
+                        comment.setText("");
+                Toast.makeText(this, "Comment added successfully", Toast.LENGTH_SHORT).show();
+            });
+        });
 
         request_service.setOnClickListener(v -> {
             if (mAuth.getCurrentUser() != null) {
                 mDb.collection("users")
-                        .document(Objects.requireNonNull(mAuth.getUid()))
-                        .get().addOnCompleteListener(task -> {
+                    .document(Objects.requireNonNull(mAuth.getUid()))
+                    .get().addOnCompleteListener(task -> {
                     if (task.isSuccessful()) {
                         DocumentSnapshot result = task.getResult();
                         if (result.contains("role")) {
@@ -105,19 +124,19 @@ public class ViewGarage extends AppCompatActivity {
                     phone_number.setText((CharSequence) result.get("phone"));
                     try {
                         mDb.collection("companies/")
-                                .document(documentPath).collection("services").get().addOnCompleteListener(task1 -> {
-                                    if (task1.isSuccessful()){
-                                        List<DocumentSnapshot> documents = task1.getResult().getDocuments();
-                                        documents.forEach(documentSnapshot -> {
-                                            items.add(new Services(documentSnapshot.get("service"), documentSnapshot.get("price")));
-                                        });
+                            .document(documentPath).collection("services").get().addOnCompleteListener(task1 -> {
+                                if (task1.isSuccessful()){
+                                    List<DocumentSnapshot> documents = task1.getResult().getDocuments();
+                                    documents.forEach(documentSnapshot -> {
+                                        items.add(new Services(documentSnapshot.get("service"), documentSnapshot.get("price")));
+                                    });
 
-                                        services_adapter = new ServicesAdapter(this, items);
+                                    services_adapter = new ServicesAdapter(this, items);
 
-                                        services_rec.setLayoutManager(new LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false));
-                                        services_rec.setNestedScrollingEnabled(false);
-                                        services_rec.setAdapter(services_adapter);
-                                    }
+                                    services_rec.setLayoutManager(new LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false));
+                                    services_rec.setNestedScrollingEnabled(false);
+                                    services_rec.setAdapter(services_adapter);
+                                }
                         });
                         /*HashMap<Object, Object> services = (HashMap<Object, Object>) result.get("services");
 
@@ -179,14 +198,14 @@ public class ViewGarage extends AppCompatActivity {
             if (grantResults.length > 0
                     && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
                 Toast.makeText(this,
-                        "Permission Granted",
-                        Toast.LENGTH_SHORT)
-                        .show();
+                    "Permission Granted",
+                    Toast.LENGTH_SHORT)
+                    .show();
             } else {
                 Toast.makeText(this,
-                        "Permission Denied",
-                        Toast.LENGTH_SHORT)
-                        .show();
+                    "Permission Denied",
+                    Toast.LENGTH_SHORT)
+                    .show();
             }
         }
     }

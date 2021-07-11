@@ -29,12 +29,13 @@ import java.util.Objects;
 
 public class DashboardActivity extends AppCompatActivity {
     private static final String TAG = "Dash";
-    Button editProfile, add_service;
+    Button editProfile, add_service, view_comments;
     ImageButton logout;
     RecyclerView requests;
     FirebaseFirestore db;
     FirebaseAuth mAuth;
     RequestsRecView adapter;
+    String companyId;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -47,10 +48,17 @@ public class DashboardActivity extends AppCompatActivity {
         requests = findViewById(R.id.requests);
         editProfile = findViewById(R.id.editLocation);
         logout = findViewById(R.id.logout);
+        view_comments = findViewById(R.id.view_comments);
 
         logout.setOnClickListener(v -> {
             mAuth.signOut();
             finish();
+        });
+
+        view_comments.setOnClickListener(v -> {
+            Intent view_com = new Intent(DashboardActivity.this,ViewComments.class);
+            view_com.putExtra("companyId",companyId.trim());
+            startActivity(view_com);
         });
 
         add_service.setOnClickListener(v -> {
@@ -83,7 +91,8 @@ public class DashboardActivity extends AppCompatActivity {
                 .document(Objects.requireNonNull(mAuth.getUid()))
                 .get().addOnCompleteListener(task -> {
             if (task.isSuccessful()) {
-                String companyId = task.getResult().get("companyId").toString();
+                companyId = Objects.requireNonNull(task.getResult().get("companyId")).toString();
+
                 // Create query
                 Query query = db.collection("companies/"+companyId+"/Requests");
 

@@ -6,126 +6,173 @@
     android:layout_height="match_parent"
     tools:context=".ViewGarage">
 
-    <TextView
-        android:id="@+id/comp"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="24dp"
-        android:text="COMPANY OVERVIEW"
-        android:textSize="16sp"
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintTop_toTopOf="parent"
+        tools:ignore="ScrollViewCount">
 
-    <TextView
-        android:id="@+id/textView6"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="16dp"
-        android:layout_marginTop="8dp"
-        android:text="Company Name:"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/comp" />
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+            <TextView
+                android:id="@+id/comp"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="24dp"
+                android:text="COMPANY OVERVIEW"
+                android:textSize="16sp"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
 
-    <TextView
-        android:id="@+id/textView7"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="16dp"
-        android:layout_marginTop="16dp"
-        android:text="Opening hours:"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/textView6" />
+            <TextView
+                android:id="@+id/textView6"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="16dp"
+                android:layout_marginTop="8dp"
+                android:text="Company Name:"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/comp" />
 
-    <TextView
-        android:id="@+id/textView8"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="16dp"
-        android:layout_marginTop="16dp"
-        android:text="Closing hours:"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/textView7" />
+            <TextView
+                android:id="@+id/textView7"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="16dp"
+                android:layout_marginTop="16dp"
+                android:text="Opening hours:"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/textView6" />
 
-    <TextView
-        android:id="@+id/textView9"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="16dp"
-        android:layout_marginTop="16dp"
-        android:text="Phone number:"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/textView8" />
+            <TextView
+                android:id="@+id/textView8"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="16dp"
+                android:layout_marginTop="16dp"
+                android:text="Closing hours:"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/textView7" />
 
-    <TextView
-        android:id="@+id/company_name"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="16dp"
-        android:text="TextView"
-        app:layout_constraintBottom_toBottomOf="@+id/textView6"
-        app:layout_constraintStart_toEndOf="@+id/textView6"
-        app:layout_constraintTop_toTopOf="@+id/textView6" />
+            <TextView
+                android:id="@+id/textView9"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="16dp"
+                android:layout_marginTop="16dp"
+                android:text="Phone number:"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/textView8" />
 
-    <TextView
-        android:id="@+id/opening_hour"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="16dp"
-        android:text="TextView"
-        app:layout_constraintStart_toStartOf="@+id/company_name"
-        app:layout_constraintTop_toBottomOf="@+id/company_name" />
+            <TextView
+                android:id="@+id/company_name"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="16dp"
+                android:text="TextView"
+                app:layout_constraintBottom_toBottomOf="@+id/textView6"
+                app:layout_constraintStart_toEndOf="@+id/textView6"
+                app:layout_constraintTop_toTopOf="@+id/textView6" />
 
-    <TextView
-        android:id="@+id/closing_hour"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="16dp"
-        android:text="TextView"
-        app:layout_constraintStart_toStartOf="@+id/opening_hour"
-        app:layout_constraintTop_toBottomOf="@+id/opening_hour" />
+            <TextView
+                android:id="@+id/opening_hour"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="16dp"
+                android:text="TextView"
+                app:layout_constraintStart_toStartOf="@+id/company_name"
+                app:layout_constraintTop_toBottomOf="@+id/company_name" />
 
-    <TextView
-        android:id="@+id/phone_number"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="16dp"
-        android:text="TextView"
-        app:layout_constraintStart_toStartOf="@+id/closing_hour"
-        app:layout_constraintTop_toBottomOf="@+id/closing_hour" />
+            <TextView
+                android:id="@+id/closing_hour"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="16dp"
+                android:text="TextView"
+                app:layout_constraintStart_toStartOf="@+id/opening_hour"
+                app:layout_constraintTop_toBottomOf="@+id/opening_hour" />
 
-    <TextView
-        android:id="@+id/textView14"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="16dp"
-        android:text="SERVICES OFFERED"
-        android:textSize="16sp"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/emergency_request" />
+            <TextView
+                android:id="@+id/phone_number"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="16dp"
+                android:text="TextView"
+                app:layout_constraintStart_toStartOf="@+id/closing_hour"
+                app:layout_constraintTop_toBottomOf="@+id/closing_hour" />
 
-    <androidx.recyclerview.widget.RecyclerView
-        android:id="@+id/services_list"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="16dp"
-        android:layout_marginTop="8dp"
-        android:layout_marginEnd="16dp"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.0"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/textView14" />
+            <TextView
+                android:id="@+id/textView14"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="16dp"
+                android:text="SERVICES OFFERED"
+                android:textSize="16sp"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/emergency_request" />
 
-    <Button
-        android:id="@+id/emergency_request"
-        style="@style/Widget.MaterialComponents.Button.OutlinedButton"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="16dp"
-        android:text="Request Service"
-        android:textAllCaps="false"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/phone_number" />
+            <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/services_list"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="16dp"
+                android:layout_marginTop="8dp"
+                android:layout_marginEnd="16dp"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintHorizontal_bias="1.0"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/textView14" />
+
+            <Button
+                android:id="@+id/emergency_request"
+                style="@style/Widget.MaterialComponents.Button.OutlinedButton"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="16dp"
+                android:text="Request Service"
+                android:textAllCaps="false"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/phone_number" />
+
+            <com.google.android.material.textfield.TextInputLayout
+                android:id="@+id/textInputLayout"
+                android:layout_width="0dp"
+                android:layout_height="200dp"
+                android:layout_marginStart="16dp"
+                android:layout_marginTop="16dp"
+                android:layout_marginEnd="24dp"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/services_list">
+
+                <com.google.android.material.textfield.TextInputEditText
+                    android:id="@+id/comment"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:hint="Comment" />
+            </com.google.android.material.textfield.TextInputLayout>
+
+            <Button
+                android:id="@+id/save_comment"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="16dp"
+                android:layout_marginTop="8dp"
+                android:layout_marginEnd="16dp"
+                android:layout_marginBottom="24dp"
+                android:text="Save"
+                android:textAllCaps="false"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/textInputLayout" />
+        </androidx.constraintlayout.widget.ConstraintLayout>
+    </ScrollView>
 </androidx.constraintlayout.widget.ConstraintLayout>
