@@ -26,6 +26,7 @@ import com.louisngatale.garagehub.data.Services;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Objects;
 
 public class ViewGarage extends AppCompatActivity {
@@ -103,16 +104,28 @@ public class ViewGarage extends AppCompatActivity {
                     company_name.setText((CharSequence) result.get("company"));
                     phone_number.setText((CharSequence) result.get("phone"));
                     try {
-                        HashMap<Object, Object> services = (HashMap<Object, Object>) result.get("services");
+                        mDb.collection("companies/")
+                                .document(documentPath).collection("services").get().addOnCompleteListener(task1 -> {
+                                    if (task1.isSuccessful()){
+                                        List<DocumentSnapshot> documents = task1.getResult().getDocuments();
+                                        documents.forEach(documentSnapshot -> {
+                                            items.add(new Services(documentSnapshot.get("service"), documentSnapshot.get("price")));
+                                        });
+
+                                        services_adapter = new ServicesAdapter(this, items);
+
+                                        services_rec.setLayoutManager(new LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false));
+                                        services_rec.setNestedScrollingEnabled(false);
+                                        services_rec.setAdapter(services_adapter);
+                                    }
+                        });
+                        /*HashMap<Object, Object> services = (HashMap<Object, Object>) result.get("services");
 
                         services.forEach((k, v) -> {
                             items.add(new Services(k, v));
-                        });
-                        services_adapter = new ServicesAdapter(this, items);
+                        });*/
 
-                        services_rec.setLayoutManager(new LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false));
-                        services_rec.setNestedScrollingEnabled(false);
-                        services_rec.setAdapter(services_adapter);
+
                     } catch (Exception e) {
                         Log.d(TAG, e.getMessage());
                     }

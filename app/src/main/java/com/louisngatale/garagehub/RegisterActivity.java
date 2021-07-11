@@ -259,7 +259,6 @@ public class RegisterActivity extends AppCompatActivity implements View.OnClickL
                 .forEach(image -> images.add(String.valueOf(image)));
         ArrayList<String> emptyImages = new ArrayList<>();
 
-
         // Create a companies document to store general company data
         mDb.collection("companies")
             .add(companies)

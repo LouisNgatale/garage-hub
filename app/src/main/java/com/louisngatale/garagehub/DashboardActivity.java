@@ -29,7 +29,7 @@ import java.util.Objects;
 
 public class DashboardActivity extends AppCompatActivity {
     private static final String TAG = "Dash";
-    Button editProfile;
+    Button editProfile, add_service;
     ImageButton logout;
     RecyclerView requests;
     FirebaseFirestore db;
@@ -43,7 +43,7 @@ public class DashboardActivity extends AppCompatActivity {
 
         db = FirebaseFirestore.getInstance();
         mAuth = FirebaseAuth.getInstance();
-
+        add_service = findViewById(R.id.add_service);
         requests = findViewById(R.id.requests);
         editProfile = findViewById(R.id.editLocation);
         logout = findViewById(R.id.logout);
@@ -51,6 +51,11 @@ public class DashboardActivity extends AppCompatActivity {
         logout.setOnClickListener(v -> {
             mAuth.signOut();
             finish();
+        });
+
+        add_service.setOnClickListener(v -> {
+            Intent add_service_intent = new Intent(DashboardActivity.this,AddService.class);
+            startActivity(add_service_intent);
         });
 
         db.collection("users")
@@ -84,9 +89,9 @@ public class DashboardActivity extends AppCompatActivity {
 
                 // Configure the adapter options
                 FirestoreRecyclerOptions<Requests> options =
-                        new FirestoreRecyclerOptions.Builder<Requests>()
-                                .setQuery(query,Requests.class)
-                                .build();
+                    new FirestoreRecyclerOptions.Builder<Requests>()
+                        .setQuery(query,Requests.class)
+                        .build();
 
                 adapter = new RequestsRecView(options,this);
 

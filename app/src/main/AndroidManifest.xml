@@ -28,6 +28,7 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/Theme.GarageHub">
+        <activity android:name=".AddService"></activity>
         <activity android:name=".CustomerLogin" />
         <activity android:name=".CustomerRegistration" />
         <activity android:name=".ViewGarage" />
@@ -48,8 +49,6 @@
 
         <activity android:name=".LoginActivity" />
         <activity android:name=".MainActivity" />
-
-
     </application>
 
 </manifest>
