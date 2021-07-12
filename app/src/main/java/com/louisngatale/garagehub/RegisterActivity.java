@@ -165,7 +165,6 @@ public class RegisterActivity extends AppCompatActivity implements View.OnClickL
         startActivityForResult(Intent.createChooser(galleryIntent,"SELECT IMAGE"),PICK_IMAGE);
     }
 
-
     @SuppressLint("QueryPermissionsNeeded")
     private void dispatchTakePictureIntent() {
         Intent takePictureIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
@@ -175,7 +174,6 @@ public class RegisterActivity extends AppCompatActivity implements View.OnClickL
             // display error state to the user
         }
     }
-
 
     private void addImage(@Nullable Intent data, String type) {
 //        TODO: Toggle empty image placeholder

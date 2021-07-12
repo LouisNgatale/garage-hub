@@ -136,19 +136,22 @@ public class MainActivity extends AppCompatActivity implements
                         if (doc.contains("Address")){
                             addresses.add((HashMap<String, Object>) doc.get("Address"));
                             //Create new latitude and longitude object
-                            LatLng latLng = new LatLng(
-                                (double) ((HashMap<?, ?>) Objects.requireNonNull(doc.get("Address")))
-                                        .get("Latitude"),
-                                (double) ((HashMap<?, ?>) Objects.requireNonNull(doc.get("Address")))
-                                        .get("Longitude"));
-                            //Add latitude and longitude to new options object
-                            MarkerOptions options = new MarkerOptions()
-                                .position(latLng)
-                                .icon(BitmapDescriptorFactory.fromResource(R.drawable.baseline_garage_black_36))
-                                .title(doc.get("company").toString())
-                                .snippet(doc.get("description").toString());
-                            //Add marker to map
-                            googleMap.addMarker(options).setTag(doc);
+                            if (((HashMap<?, ?>) doc.get("Address")).get("Latitude") != null && ((HashMap<?, ?>) doc.get("Address")).get("Longitutde") != null) {
+                                LatLng latLng = new LatLng(
+                                        (double) ((HashMap<?, ?>) doc.get("Address"))
+                                                .get("Latitude"),
+                                        (double) ((HashMap<?, ?>) doc.get("Address"))
+                                                .get("Longitude"));
+
+                                //Add latitude and longitude to new options object
+                                MarkerOptions options = new MarkerOptions()
+                                        .position(latLng)
+                                        .icon(BitmapDescriptorFactory.fromResource(R.drawable.baseline_garage_black_36))
+                                        .title(doc.get("company").toString())
+                                        .snippet(doc.get("description").toString());
+                                //Add marker to map
+                                googleMap.addMarker(options).setTag(doc);
+                            }
                         }
 
                     });
